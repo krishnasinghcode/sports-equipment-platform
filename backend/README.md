@@ -4,13 +4,13 @@
 # Table of Contents
 - [Project Planning](#project-planning)
   - [Folder Structure](#folder-structure)
-  - [System Design Diagrams](#system-design-diagrams)
   - [Api Endpoints](#Api-Endpoints)
   - [Data relations ](#Data-relations )
   - [Enverironment Variables](#environment-variables)
 
 
 ## Tech Stack
+
 ### Backend
 - JavaScript – Core programming language for backend logic.
 - Node.js – Runtime environment for executing JavaScript on the server.
@@ -60,108 +60,6 @@ backend/
 │   ├── seedProducts.js            # Script for seeding initial product data
 ├── server.js                       # Main server entry point
 ```
-
-## system design diagrams
-```
-backend/
-├── controllers/
-│   ├── admin/
-│   │   ├── authController.js
-│   │   │   ├── Admin login/logout
-│   │   │   ├── Password reset
-│   │   │   ├── Admin session management
-│   │   ├── productController.js
-│   │       ├── Add new products
-│   │       ├── Edit product details
-│   │       ├── Delete products
-│   │       ├── View all products (with filters/sorting options)
-│   │       ├── Manage categories/tags
-│   │
-│   ├── user/
-│   │   ├── authController.js
-│   │   │   ├── User registration
-│   │   │   ├── User login/logout
-│   │   │   ├── Password reset
-│   │   │   ├── Token-based authentication
-│   │   ├── productController.js
-│   │   │   ├── View all products (pagination and sorting: price, rating)
-│   │   │   ├── Filter by category/tags
-│   │   │   ├── View product details (productId)
-│   │   ├── cartController.js
-│   │       ├── Add product to cart
-│   │       ├── Remove product from cart
-│   │       ├── Update product quantity in cart
-│   │       ├── View cart items
-│
-├── models/
-│   ├── Admin.js                   # Admin model (fields: name, email, password, role)
-│   ├── Cart.js                    # Cart model (fields: userId, products [{ productId, quantity }])
-│   ├── Product.js                 # Product model (fields: name, category, price, description, images)
-│   ├── User.js                    # User model (fields: name, email, password, role)
-│
-├── routes/
-│   ├── admin/
-│   │   ├── authRoutes.js
-│   │   │   ├── POST /admin/login         # Admin login
-|   |   |   ├── POST /admin/signup        # Admin signup
-│   │   ├── productRoutes.js
-│   │   │   ├── GET /admin/products       # View all products (filters/sorting)
-│   │   │   ├── POST /admin/products      # Add product
-│   │   │   ├── PUT /admin/products/:id   # Update product
-│   │   │   ├── DELETE /admin/products/:id # Delete product
-│   │   │   ├── POST /admin/categories    # Add category/tags
-│   ├── user/
-│   │   ├── authRoutes.js
-│   │   │   ├── POST /auth/register       # User registration
-│   │   │   ├── POST /auth/login          # User login
-│   │   │   ├── POST /auth/logout         # User logout
-│   │   │   ├── POST /auth/reset-password # Password reset
-│   │   ├── productRoutes.js
-│   │   │   ├── GET /products             # Get all products (with pagination/sorting)
-│   │   │   ├── GET /products/:id         # Get product details
-│   │   │   ├── GET /products/categories  # Get product categories
-│   │   ├── cartRoutes.js
-│   │       ├── POST /cart                # Add product to cart
-│   │       ├── DELETE /cart/:productId   # Remove product from cart
-│   │       ├── PUT /cart/:productId      # Update cart quantity
-│   │       ├── GET /cart                 # View user cart
-│
-├── middlewares/
-│   ├── authMiddleware.js
-│   │   ├── Protect routes (check JWT token)
-│   │   ├── Role-based access (e.g., admin vs user)
-│   ├── errorHandler.js
-│       ├── Handle validation errors
-│       ├── Handle database errors
-│       ├── Handle 404 errors
-│
-├── utils/
-│   ├── db.js
-│   │   ├── MongoDB connection
-│   ├── logger.js
-│       ├── Log request/response details
-│       ├── Log errors for debugging
-│
-├── config/
-│   ├── keys.js
-│       ├── Store sensitive keys (DB URI, JWT secret)
-│
-├── seed/
-│   ├── seedProducts.js
-│       ├── Populate initial product data (categories, sample products)
-│
-├── server.js
-│   ├── Initialize Express server
-│   ├── Load middleware
-│   ├── Setup API routes
-│   ├── Error handling
-```
-
-
-Here is a professional and well-structured version of the API documentation for your sports equipment website backend, suitable for inclusion in your `README.md`:
-
----
-
 
 
 ## API Endpoints
@@ -312,32 +210,6 @@ Let me know if you'd like to include request/response formats, status codes, or 
     "reviewRating":"5"
 }
 ```
-
-## Data relations 
-`https://dreampuf.github.io/GraphvizOnline/`
-``` 
-digraph ProductReviewSystem {
-    // Entities
-    Product [shape=box];
-    Review [shape=box];
-    User [shape=box];
-    Order [shape=box];
-    Cart [shape=box];
-    Admin [shape=box];
-
-    // Relationships
-    Product -> Review [label="has"];
-    Review -> Product [label="belongs to"];
-    User -> Review [label="writes"];
-    User -> Order [label="places"];
-    Order -> Product [label="contains"];
-    User -> Cart [label="owns"];
-    Cart -> Product [label="holds"];
-    Admin -> Product [label="manages"];
-    Admin -> User [label="manages"];
-}
-```
-
 
 
 ## Environment Variables

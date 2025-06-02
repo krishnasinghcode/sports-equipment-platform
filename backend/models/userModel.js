@@ -10,13 +10,9 @@ const userSchema = new mongoose.Schema({
     // Address is an array of address objects
     address: [
         {
-            line1: { type: String },
-            line2: { type: String },
-            city: { type: String },
-            state: { type: String },
-            zipCode: { type: String },
-            country: { type: String },
-        },
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Address',
+        }
     ],
 
     // Reference to orders placed by the user
@@ -25,14 +21,6 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order',
         },
-    ],
-
-    // Reference to reviews written by the user
-    reviews: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Review'
-        }
     ],
 
     // Auth provider: 'local' or 'google'

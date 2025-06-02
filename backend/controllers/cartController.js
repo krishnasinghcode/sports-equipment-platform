@@ -1,10 +1,12 @@
 import Cart from '../models/cartModel.js';
 import Product from '../models/productModel.js';
 import mongoose from 'mongoose';
+
 // ADD TO CART
 export const addToCart = async (req, res) => {
     try {
-        const { userId, productId, quantity } = req.body;
+        const {productId, quantity } = req.body;
+        const userId = req.user._id; // Assuming userId is obtained from the authenticated user
 
         // Check if product exists
         const product = await Product.findById(productId);
@@ -51,7 +53,7 @@ export const addToCart = async (req, res) => {
 // GET CART
 export const getCart = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user._id; // Assuming userId is obtained from the authenticated user
         const cart = await Cart.findOne({ userId }).populate('products.productId');
         if (!cart) return res.status(404).json({ message: "Cart not found" });
 
@@ -64,7 +66,8 @@ export const getCart = async (req, res) => {
 // REDUCE QUANTITY 
 export const reduceQuantity = async (req, res) => {
     try {
-        const { userId, productId, quantity } = req.body;
+        const { productId, quantity } = req.body;
+        const userId = req.user._id; // Assuming userId is obtained from the authenticated user
 
         // Validate ObjectIds
         if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId)) {
@@ -112,7 +115,8 @@ export const reduceQuantity = async (req, res) => {
 // REMOVE FROM CART
 export const removeFromCart = async (req, res) => {
     try {
-        const { userId, productId } = req.body;
+        const {productId } = req.body;
+        const userId = req.user._id; // Assuming userId is obtained from the authenticated user
 
         let cart = await Cart.findOne({ userId });
         if (!cart) return res.status(404).json({ message: "Cart not found" });

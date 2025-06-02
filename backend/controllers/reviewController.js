@@ -4,10 +4,11 @@ import User from '../models/userModel.js'
 
 // function for getting all the reviwes made by a user
 export const getReview = async (req, res) => {
-    const { reviewId } = req.params;
+    const userId = req.user._id; // Assuming user ID is available in the request
 
     try {
-        const review = await Review.findById(reviewId);
+        const review = await Review.findById(userId)
+            .populate('productId', 'name productId') // Populate product details;
         if (!review) {
             return res.status(404).json({ message: "Review Not Found!" });
         }
@@ -18,10 +19,10 @@ export const getReview = async (req, res) => {
     }
 };
 
-
 //function for adding a new review
 export const addReview = async (req, res) => {
-    const { userId, productId, reviewText, reviewRating } = req.body;
+    const {productId, reviewText, reviewRating } = req.body;
+    const userId = req.user._id; // Assuming user ID is available in the request
 
     try {
         const product = await Product.findOne({ productId });
@@ -47,8 +48,10 @@ export const addReview = async (req, res) => {
             rating: reviewRating
         });
 
-        product.reviews.push(newReview._id);
-        await product.save();
+        await Review.save();
+
+        // change the product's rating due to the new review;
+
 
         return res.status(201).json({ message: "Review added successfully!", review: newReview });
     } catch (error) {
@@ -56,16 +59,19 @@ export const addReview = async (req, res) => {
     }
 };
 
-
 //function for Updating a review
 export const updateReview = async (req, res) => {
     const { reviewId } = req.params;
     const { reviewText, reviewRating } = req.body;
+    const userId = req.user._id; // Assuming user ID is available in the request
 
     try {
         const review = await Review.findById(reviewId);
         if (!review) {
             return res.status(404).json({ message: "Review Not Found!" });
+        }
+        if (!review.userId.equals(userId)) {
+            return res.status(403).json({ message: "Unauthorized to update this review" });
         }
 
         if (reviewText) review.reviewText = reviewText;
@@ -73,12 +79,13 @@ export const updateReview = async (req, res) => {
 
         await review.save();
 
+        // update the product's rating if review rating is updated
+
         return res.status(200).json({ message: "Review updated successfully!", review });
     } catch (error) {
         return res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
-
 
 //function forDeleting a review
 export const deleteReview = async (req, res) => {
@@ -97,6 +104,8 @@ export const deleteReview = async (req, res) => {
             { _id: productId },
             { $pull: { reviews: reviewId } }
         );
+
+        // update the product's rating after review deletion
 
         return res.status(200).json({ message: "Review deleted successfully!" });
     } catch (error) {

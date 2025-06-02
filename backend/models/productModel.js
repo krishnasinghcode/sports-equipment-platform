@@ -23,13 +23,8 @@ const productSchema = new mongoose.Schema({
     specifications: { type: String },
     technicalInformation: { type: String },
     priceOriginal: { type: Number, required: true },
+    priceCurrency: { type: String, default: 'INR', required: true },
     priceDiscounted: { type: Number },
-    reviews: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Review'
-        }
-    ],
     sizeOrType: [{ type: String }],
 }, { timestamps: true });
 
